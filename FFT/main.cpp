@@ -1,10 +1,13 @@
+#include "Wave.h"
 #include <iostream>
-#include "FFT.h"
 
 int main(int argc, const char* argv[]){
 	std::cout << "How many input values are there (remember it must be a power of 2): ";
 	int size;
 	std::cin >> size;
+	std::cout << "\nWhat is the sampling interval? ";
+	float interval;
+	std::cin >> interval;
 
 	std::vector<std::complex<float>> values;
 	for(int i = 0; i < size; i++){
@@ -19,7 +22,8 @@ int main(int argc, const char* argv[]){
 		values.push_back(std::complex<float>(real, imaginary));
 	}
 
-	values = calcFFT(values);
+	Wave* wave = new Wave(values, interval); 
+	std::cout << "\n" << wave->toString() << std::endl;
 
-	std::cout << fftToString(calcInverseFFT(values), values);
+	return 1;
 }
