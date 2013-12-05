@@ -9,7 +9,7 @@ int main(int argc, const char* argv[]){
 	float interval;
 	std::cin >> interval;
 
-	std::vector<std::complex<float>> values;
+	Wave::VectorCf* values = new Wave::VectorCf();
 	for(int i = 0; i < size; i++){
 		std::cout << "Enter the real part of the amplitude: ";
 		float real;
@@ -19,9 +19,9 @@ int main(int argc, const char* argv[]){
 		float imaginary;
 		std::cin >> imaginary;
 
-		values.push_back(std::complex<float>(real, imaginary));
+		values->push_back(std::complex<float>(real, imaginary));
 	}
-
+	
 	Wave* wave = new Wave(values, interval); 
 	std::cout << "\n" << wave->toString() << std::endl;
 
