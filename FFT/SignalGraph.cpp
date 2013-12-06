@@ -7,6 +7,7 @@ SignalGraph::SignalGraph(Wave* wave, int width, int height){
 
 	this->timePlot = new Plot(TIMEDOMAINGRAPH_X, TIMEDOMAINGRAPH_Y, wave->samplingInterval, GRAPH_WIDTH, GRAPH_HEIGHT, wave->timeDomain, "Seconds", "Amplitude", 70, 20, 75, 20);
 
+	//Convert magnitudes to decibels before creating plot
 	std::vector<float>* nums = new std::vector<float>();
 	for(unsigned int i = 0; i < wave->magnitudes->size(); i++){
 		if(wave->magnitudes->at(i) < 1){
@@ -20,6 +21,7 @@ SignalGraph::SignalGraph(Wave* wave, int width, int height){
 }
 
 bool SignalGraph::init(){
+	//Initialize SDL
 	bool success = true;
 	if(SDL_Init(SDL_INIT_VIDEO) < 0){
 		printf("Could not initialize SDL. SDL_ERROR: %s\n", SDL_GetError());
@@ -44,6 +46,8 @@ bool SignalGraph::init(){
 				
 			}
 		}
+
+		//Initialize SDL_ttf
 		if(TTF_Init() < 0){
 			printf("Could not initialize SDL_TTF for text drawing. TTF_Error:  %s\n", TTF_GetError());
 			success = false;
@@ -57,14 +61,19 @@ bool SignalGraph::init(){
 
 void SignalGraph::drawSignal(){
 	SDL_SetRenderTarget(renderer, texture);
+	
+	//Color background white
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 	SDL_RenderFillRect(renderer, NULL);
+
+	//Draw plots
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-	timePlot->drawPlot(texture, renderer, font);
-	frequencyPlot->drawPlot(texture, renderer, font);
+	timePlot->drawPlot(renderer, font);
+	frequencyPlot->drawPlot(renderer, font);
 }
 
 void SignalGraph::close(){
+	//Free memory and quit SDL
 	SDL_DestroyRenderer(renderer);
 	renderer = NULL;
 	SDL_DestroyWindow(window);

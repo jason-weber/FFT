@@ -13,6 +13,7 @@ Wave::Wave(VectorCf* values, float sampleLengthInSeconds){
 }
 
 float Wave::getMagnitude(std::complex<float> num){
+	//Return the magnitude of the given complex number
 	return std::sqrtf(num.real() * num.real() + num.imag() * num.imag());
 }
 
@@ -92,6 +93,8 @@ Wave::VectorCf* Wave::calcInverseFFT(VectorCf* fft){
 
 std::string Wave::toString(){
 	std::ostringstream buff;
+	
+	//Convert time graph to a string
 	buff << "Signal in the time domain: \n[\n";
 	for(unsigned int i = 0; i < timeDomain->size() - 1; i++){
 		buff << std::setprecision(2) << timeDomain->at(i).real();
@@ -103,6 +106,8 @@ std::string Wave::toString(){
 	buff << " + ";
 	buff << std::setprecision(2) << timeDomain->at(timeDomain->size() - 1).imag();
 	buff << " * i\n]\n\n";
+
+	//Convert frequency graph to a string
 	buff << "Signal in the frequency domain: \n[\n";
 	for(unsigned int i = 0; i < frequencyDomain->size() - 1; i++){
 		buff << std::setprecision(2) << frequencyDomain->at(i).real();
@@ -115,6 +120,7 @@ std::string Wave::toString(){
 	buff << std::setprecision(2) << frequencyDomain->at(frequencyDomain->size() - 1).imag();
 	buff << " * i\n]\n";
 
+	//Convert magnitudes to string
 	buff << "\nFrequency magnitudes: \n[\n";
 	for(unsigned int i = 0; i < magnitudes->size() - 1; i++){
 		buff << magnitudes->at(i) << " at " << i * this->samplingRate / timeDomain->size() << " Hz,\n";

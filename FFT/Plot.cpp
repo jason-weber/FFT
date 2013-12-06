@@ -1,7 +1,9 @@
 #include "Plot.h"
 
 Plot::Plot(int x, int y, float deltaX, int width, int height, std::vector<std::complex<float>>* nums, std::string xAxis, std::string yAxis, int xtext_width, int xtext_height, int ytext_width, int ytext_height){
+	
 	std::vector<float>* yValues = new std::vector<float>();
+	//Magnitudes for complex numbers so they can be graphed
 	for(unsigned int i = 0; i < nums->size(); i++){
 		yValues->push_back(std::sqrtf(nums->at(i).real() * nums->at(i).real() + nums->at(i).imag() * nums->at(i).imag()));
 	}
@@ -39,7 +41,7 @@ Plot::Plot(int x, int y, float deltaX, int width, int height, std::vector<float>
 	this->ytext_height = ytext_height;
 }
 
-void Plot::drawPlot(SDL_Texture* text, SDL_Renderer* renderer, TTF_Font* font){
+void Plot::drawPlot(SDL_Renderer* renderer, TTF_Font* font){
 	this->drawAxes(renderer);
 	this->drawMaxValues(renderer, font);
 	this->drawGraph(renderer);
@@ -80,11 +82,14 @@ void Plot::drawMaxValues(SDL_Renderer* renderer, TTF_Font* font){
 }
 
 void Plot::drawGraph(SDL_Renderer* renderer){
+
+	//Draw y axis tick marks
 	SDL_RenderDrawLine(renderer, x - 5, y, x + 5, y);
 	SDL_RenderDrawLine(renderer, x - 5, y + (float)(height / 5), x + 5, y + (float)(height / 5));
 	SDL_RenderDrawLine(renderer, x - 5, y + (float)(height / 5) * 2, x + 5, y + (float)(height / 5) * 2);
 	SDL_RenderDrawLine(renderer, x - 5, y + (float)(height / 5) * 3, x + 5, y + (float)(height / 5) * 3);
 	SDL_RenderDrawLine(renderer, x - 5, y + (float)(height / 5) * 4, x + 5, y + (float)(height / 5) * 4);
+	
 	for(unsigned int i = 0; i < yValues->size() - 1; i++){
 		//Draw next plot line
 		int x1 = (int)((i * deltaX / this->maxX) * this->width + x);
@@ -101,6 +106,7 @@ void Plot::drawGraph(SDL_Renderer* renderer){
 
 void Plot::drawAxesLabels(SDL_Renderer* renderer, TTF_Font* font){
 	//Draw axes labels
+	//Draw X label
 	SDL_Color color = {0, 0, 0, SDL_ALPHA_OPAQUE};
 	SDL_Surface* surf = TTF_RenderText_Solid(font, xAxis.c_str(), color);
 	SDL_Rect pos;
@@ -112,6 +118,8 @@ void Plot::drawAxesLabels(SDL_Renderer* renderer, TTF_Font* font){
 	SDL_RenderCopy(renderer, texture, NULL, &pos);
 	SDL_FreeSurface(surf);
 	SDL_DestroyTexture(texture);
+	
+	//Draw Y label
 	surf = TTF_RenderText_Solid(font, yAxis.c_str(), color);
 	pos.x = 0;
 	pos.y = y + height / 2;
