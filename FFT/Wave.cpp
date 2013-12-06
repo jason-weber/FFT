@@ -3,8 +3,17 @@
 Wave::Wave(VectorCf* values, float sampleLengthInSeconds){
 	this->timeDomain = values;
 	this->frequencyDomain = this->calcFFT(values);
+	this->sampleLength = sampleLengthInSeconds;
 	this->samplingInterval = this->calculateSamplingInterval(sampleLengthInSeconds, values->size());
 	this->samplingRate = 1 / this->samplingInterval;
+	this->magnitudes = new std::vector<float>(values->size());
+	for(unsigned int i = 0; i < magnitudes->size(); i++){
+		magnitudes->at(i) = this->getMagnitude(frequencyDomain->at(i));
+	}
+}
+
+float Wave::getMagnitude(std::complex<float> num){
+	return std::sqrtf(num.real() * num.real() + num.imag() * num.imag());
 }
 
 float Wave::calculateSamplingInterval(float sampleLength, unsigned int numberOfSamples){
@@ -41,7 +50,7 @@ Wave::VectorCf* Wave::calcFFT(Wave::VectorCf* values){
 	//Calculate
 	for(int k = 0; k < size / 2; k++){	
 		//Euler's Identity
-		float exp = (float)(-2 * k * M_PI / size);
+		float exp = (float)(-2 * k * PI / size);
 		std::complex<float> complex(cos(exp), sin(exp));
 		
 		//Butterfly operation
@@ -105,5 +114,12 @@ std::string Wave::toString(){
 	buff << " + ";
 	buff << std::setprecision(2) << frequencyDomain->at(frequencyDomain->size() - 1).imag();
 	buff << " * i\n]\n";
+
+	buff << "Frequency magnitudes: \n[\n";
+	for(unsigned int i = 0; i < magnitudes->size() - 1; i++){
+		buff << magnitudes->at(i) << " at " << i * this->samplingRate / timeDomain->size() << " Hz ,\n";
+	}
+	buff << magnitudes->at(magnitudes->size() - 1) << " at " << (magnitudes->size() - 1) * this->samplingRate / timeDomain->size() << " Hz\n]\n";
+
 	return buff.str();
 }

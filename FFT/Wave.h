@@ -7,8 +7,7 @@
 #include <algorithm>
 #include <iomanip>
 #define _USE_MATH_DEFINES
-#include <math.h>
-
+#define PI 3.14159
 
 class Wave{
 public:
@@ -18,8 +17,10 @@ public:
 
 	VectorCf* frequencyDomain;
 	VectorCf* timeDomain;
+	std::vector<float>* magnitudes;
 	float samplingInterval;
 	float samplingRate;
+	float sampleLength;
 
 	VectorCf* calcFFT(VectorCf* values);
 	VectorCf* calcInverseFFT(VectorCf* values);
@@ -32,7 +33,7 @@ public:
 
 	std::string toString();
 
-	float getMagnitud(std::complex<float> num);
+	float getMagnitude(std::complex<float> num);
 
 };
 #endif
