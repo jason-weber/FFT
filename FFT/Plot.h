@@ -5,6 +5,7 @@
 #include <complex>
 #include <algorithm>
 #include "SDL_ttf.h"
+#include <iomanip>
 
 class Plot{
 public:
@@ -30,6 +31,11 @@ public:
 	std::string yAxis;
 
 	void drawPlot(SDL_Texture* text, SDL_Renderer* renderer, TTF_Font* font);
+private:
+	void drawAxes(SDL_Renderer* renderer);
+	void drawMaxValues(SDL_Renderer* renderer, TTF_Font* font);
+	void drawGraph(SDL_Renderer* renderer);
+	void drawAxesLabels(SDL_Renderer* renderer, TTF_Font* font);
 };
 
 #endif

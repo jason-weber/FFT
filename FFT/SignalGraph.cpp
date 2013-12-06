@@ -16,7 +16,7 @@ SignalGraph::SignalGraph(Wave* wave, int width, int height){
 			nums->push_back(20 * log(wave->magnitudes->at(i)));
 		}
 	}
-	this->frequencyPlot = new Plot(FFTGRAPH_X, FFTGRAPH_Y, wave->samplingRate, GRAPH_WIDTH, GRAPH_HEIGHT, nums, "Hz", "Decibels", 20, 20, 75, 20);
+	this->frequencyPlot = new Plot(FFTGRAPH_X, FFTGRAPH_Y, wave->samplingRate / wave->frequencyDomain->size(), GRAPH_WIDTH, GRAPH_HEIGHT, nums, "Hz", "Decibels", 20, 20, 75, 20);
 }
 
 bool SignalGraph::init(){
@@ -49,7 +49,7 @@ bool SignalGraph::init(){
 			success = false;
 		}
 		else{
-			font = TTF_OpenFont("arial.ttf", 20);
+			font = TTF_OpenFont("arial.ttf", 14);
 		}
 	}
 	return success;

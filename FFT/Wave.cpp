@@ -115,9 +115,9 @@ std::string Wave::toString(){
 	buff << std::setprecision(2) << frequencyDomain->at(frequencyDomain->size() - 1).imag();
 	buff << " * i\n]\n";
 
-	buff << "Frequency magnitudes: \n[\n";
+	buff << "\nFrequency magnitudes: \n[\n";
 	for(unsigned int i = 0; i < magnitudes->size() - 1; i++){
-		buff << magnitudes->at(i) << " at " << i * this->samplingRate / timeDomain->size() << " Hz ,\n";
+		buff << magnitudes->at(i) << " at " << i * this->samplingRate / timeDomain->size() << " Hz,\n";
 	}
 	buff << magnitudes->at(magnitudes->size() - 1) << " at " << (magnitudes->size() - 1) * this->samplingRate / timeDomain->size() << " Hz\n]\n";
 

@@ -40,11 +40,46 @@ Plot::Plot(int x, int y, float deltaX, int width, int height, std::vector<float>
 }
 
 void Plot::drawPlot(SDL_Texture* text, SDL_Renderer* renderer, TTF_Font* font){
-	
-	//Draw axes
+	this->drawAxes(renderer);
+	this->drawMaxValues(renderer, font);
+	this->drawGraph(renderer);
+	this->drawAxesLabels(renderer, font);	
+}
+
+void Plot::drawAxes(SDL_Renderer* renderer){
 	SDL_RenderDrawLine(renderer, x, y, x, y + height);
 	SDL_RenderDrawLine(renderer, x, y + height, x + width, y + height);
+}
 
+void Plot::drawMaxValues(SDL_Renderer* renderer, TTF_Font* font){
+	//Draw max values on axes
+	//Draw Y
+	SDL_Color color = {0, 0, 0, SDL_ALPHA_OPAQUE};
+	std::ostringstream str;
+	str << std::setprecision(2) << this->maxY;
+	std::string temp = str.str();
+	SDL_Surface* surf = TTF_RenderText_Blended(font, temp.c_str(), color);
+	SDL_Rect pos = {x - 50, y, 30, 15};
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surf); 
+	SDL_RenderCopy(renderer, texture, NULL, &pos);
+	SDL_FreeSurface(surf);
+	SDL_DestroyTexture(texture);
+
+	//Draw X
+	str.clear();
+	str.str("");
+	str << std::setprecision(2) << this->maxX;
+	temp = str.str();
+	surf = TTF_RenderText_Blended(font, temp.c_str(), color);
+	pos.x = x + width + 5;
+	pos.y = y + height + 5;
+	texture = SDL_CreateTextureFromSurface(renderer, surf); 
+	SDL_RenderCopy(renderer, texture, NULL, &pos);
+	SDL_FreeSurface(surf);
+	SDL_DestroyTexture(texture);
+}
+
+void Plot::drawGraph(SDL_Renderer* renderer){
 	SDL_RenderDrawLine(renderer, x - 5, y, x + 5, y);
 	SDL_RenderDrawLine(renderer, x - 5, y + (float)(height / 5), x + 5, y + (float)(height / 5));
 	SDL_RenderDrawLine(renderer, x - 5, y + (float)(height / 5) * 2, x + 5, y + (float)(height / 5) * 2);
@@ -61,9 +96,18 @@ void Plot::drawPlot(SDL_Texture* text, SDL_Renderer* renderer, TTF_Font* font){
 		//Draw tick marks on x axis
 		SDL_RenderDrawLine(renderer, x2, y + height - 5, x2, y + height + 5);
 	}
+
+}
+
+void Plot::drawAxesLabels(SDL_Renderer* renderer, TTF_Font* font){
+	//Draw axes labels
 	SDL_Color color = {0, 0, 0, SDL_ALPHA_OPAQUE};
 	SDL_Surface* surf = TTF_RenderText_Solid(font, xAxis.c_str(), color);
-	SDL_Rect pos = {x + width / 4, y + height + 20, xtext_width, xtext_height};
+	SDL_Rect pos;
+	pos.x = x + width / 4;
+	pos.y = y + height + 20;
+	pos.w = xtext_width;
+	pos.h = xtext_height;
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surf); 
 	SDL_RenderCopy(renderer, texture, NULL, &pos);
 	SDL_FreeSurface(surf);

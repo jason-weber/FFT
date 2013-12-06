@@ -6,9 +6,9 @@
 #include "SDL_ttf.h"
 #include "Plot.h"
 
-#define TIMEDOMAINGRAPH_X 100
+#define TIMEDOMAINGRAPH_X 125
 #define TIMEDOMAINGRAPH_Y 50
-#define FFTGRAPH_X 100
+#define FFTGRAPH_X 125
 #define FFTGRAPH_Y 300
 #define GRAPH_HEIGHT 200
 #define GRAPH_WIDTH 500
